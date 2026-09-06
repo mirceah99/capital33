@@ -14,7 +14,6 @@ export function initiateOperetingHourInIntervals(channel: SettlementChannel) {
         operationgHour.dayOfWeek -= 1
         if (operationgHour.dayOfWeek === -1) operationgHour.dayOfWeek = 6
     })
-    operatingHours = operatingHours.sort((a, b) => a.dayOfWeek * 100 + a.startHour - b.dayOfWeek * 100 + b.startHour) // sort them to insert intervals sorted
     for (const operatingHour of operatingHours) {
         let siftingDate = startDate; // immutable object
         for (let i = 0; i < nrOfWeeks; i++) {
@@ -28,6 +27,12 @@ export function initiateOperetingHourInIntervals(channel: SettlementChannel) {
             siftingDate = startDate.plus({ weeks: i + 1 })
         }
     }
+    // sort the intervals
+    intervals.sort(
+        (a, b) =>
+            DateTime.fromISO(a.starDate).toMillis() - DateTime.fromISO(b.starDate).toMillis()
+    );
+
     // add the first Closed interval 
     if (DateTime.fromISO(intervals[0].starDate).toMillis() > startDate.toMillis()) {
         intervals.unshift({
@@ -132,7 +137,7 @@ export function inserInterval(intrevalToInsert: TimeInterval, intervals: TimeInt
 
     }
     intervals.splice(startIntervalIndex + 1, 0, intrevalToInsert)
-    
+
     //delete enpty intrevals  intervals[stopIntrevalIndex].starDate = intrevalToInsert.endDate start date can be === end date so is empty intreval
     clearIntrevals(intervals)
 
@@ -164,9 +169,9 @@ export function BlackoutWindowToTimeInterval(blackoutWindow: BlackoutWindow): Ti
     }
 }
 
-function clearIntrevals(intervals: TimeIntervals){
-    for(let i = 0; i< intervals.length; i++){
-        if (intervals[i].starDate === intervals[i].endDate){
+function clearIntrevals(intervals: TimeIntervals) {
+    for (let i = 0; i < intervals.length; i++) {
+        if (intervals[i].starDate === intervals[i].endDate) {
             intervals.splice(i, 1)
         }
     }
