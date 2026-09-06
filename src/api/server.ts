@@ -33,9 +33,13 @@ const writeJson = (file: string, data: unknown) =>
 // list every scenario available in the db/scenarios folder
 app.get("/api/scenarios", (_req, res) => {
   const files = fs.readdirSync(SCENARIOS_DIR).filter((f) => f.endsWith(".json"));
-  res.json(
-    files.map((f) => ({ file: f, name: readJson(path.join(SCENARIOS_DIR, f))?.name ?? f }))
-  );
+  const list = files.map((f) => ({
+    file: f,
+    name: readJson(path.join(SCENARIOS_DIR, f))?.name ?? f,
+  }));
+  // natural (numeric-aware) sort so Demo 2 comes before Demo 10
+  list.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+  res.json(list);
 });
 
 // the currently loaded (unresolved) scenario
