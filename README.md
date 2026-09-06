@@ -20,3 +20,27 @@ Now after 30 minutes of reading the docs, I think I have a strategy, first I cre
 The hard part is that scheduling a task may require moving another task (idk if it is required but it is an interesting topic), I'll postpone this for the moment, but give you an example. For example I have Trade Order 123 with tasks A and B, B depends on A, I mean A must be complete before B. B is isRegulatoryHold: true so B cannot be rescheduled and is set for 6 Sep 10:00, A and B are both on same channel X, channel X is 10:00-18:00 each day. Today is 4 Sep and channel X is fully booked for tomorrow 5 Sep, so the Order will be rejected, but I can accept it if I delay a task from Channel X 5 Sep to another day to make room for task A.
 
 More tomorrow, now is late, I go to sleep and think.
+
+Now creating some scenarios I think that startDate endDate and durationMinutes is a poor way to represent the timing, it is very poor because I can have a 300 minutes task and the channel open today from 10:00 to 18:00 and from 12:00 to 13:00 the channel is booked with another task, so basically I'll have startDate today 10:00 endDate today 18:00 and durationMinutes 300 min (5 hours) but there is no way to know that from 12 to 13 there will be another task that is performing on that channel, ok I can go to the task from 12 to 13 and see but this is a simplified case, let's say you have this case: 
+Channel X 12:00 a - a - a - a - 20:00 where a is 1 hour of work on task a and - it is a free slot it can be booked but is free for now 
+I have to add now task b with 4 hours on channel X so it will be: 
+Channel X 12:00 a b a b a b a b 20:00 I will have: 
+
+task a: 
+startDate: 12:00 today
+endDate: 19:00 today
+durationMinutes: 4 * 60; 
+settlementChannelId: 'X'
+
+task B: 
+startDate: 13:00 today
+endDate: 20:00 today
+durationMinutes: 4 * 60; 
+settlementChannelId: 'X'
+
+So there is no way to figure out that the structure is abababab it can also be aaabbbab, I think that the proposed type for Settlement Task is poor, I'll add a new property "processingIntervals" this will be an array of tuples of dates, this thing will make the process much much clearer and by extension much easier.
+
+It is the 3rd time now I am starting to work on this project, I had a great pause, now I think processingIntervals should be on the channel, and I'll just name it as interval, and it will be an array of objects:
+{startDate, endDate, taskId, type: 'task' | 'break' etc...}
+
+When I want to find an interval I'll do an axis of time for that week, and I'll have all the intervals there and look for a slot.
