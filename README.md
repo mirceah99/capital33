@@ -44,3 +44,14 @@ It is the 3rd time now I am starting to work on this project, I had a great paus
 {startDate, endDate, taskId, type: 'task' | 'break' etc...}
 
 When I want to find an interval I'll do an axis of time for that week, and I'll have all the intervals there and look for a slot.
+
+I think I am almost done with the core functionality.
+
+Produce a valid schedule where:
+
+No settlement channel conflicts ✅
+All dependencies satisfied ✅
+All processing within operating hours ✅
+Maintenance/blackout windows respected ✅
+
+Now I stime to add some AI on the codebase, I'll ask the AI to create a intreface, and do some demos, I'll attache the promts in a separate file. I'll add the JD for context here.

@@ -43,7 +43,7 @@ export class ReflowService {
                 traskAlreadyRezolved[task.docId] = true
                 anyTaskRezolvedInThisLoop = true
                 unrezolvedTasks--;
-
+                // I think this also prevent from loop task dependency a depends b and b on a 
 
             }
             if (!anyTaskRezolvedInThisLoop) throw 'Can not find a solution!'
