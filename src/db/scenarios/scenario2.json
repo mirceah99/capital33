@@ -1,0 +1,111 @@
+{
+  "name": "Scenario 2 - Delay Cascade",
+  "settlementChannels": [
+    {
+      "docId": "channel-fx",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "FX Settlement Desk",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 8, "endHour": 16 },
+          { "dayOfWeek": 2, "startHour": 8, "endHour": 16 },
+          { "dayOfWeek": 3, "startHour": 8, "endHour": 16 },
+          { "dayOfWeek": 4, "startHour": 8, "endHour": 16 },
+          { "dayOfWeek": 5, "startHour": 8, "endHour": 16 }
+        ],
+        "blackoutWindows": [],
+        "intervals": []
+      }
+    },
+    {
+      "docId": "channel-ops",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Operations Desk",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 9, "endHour": 17 },
+          { "dayOfWeek": 2, "startHour": 9, "endHour": 17 },
+          { "dayOfWeek": 3, "startHour": 9, "endHour": 17 },
+          { "dayOfWeek": 4, "startHour": 9, "endHour": 17 },
+          { "dayOfWeek": 5, "startHour": 9, "endHour": 17 }
+        ],
+        "blackoutWindows": [],
+        "intervals": []
+      }
+    }
+  ],
+  "settlementTasks": [
+    {
+      "docId": "fund-transfer",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-002-FT",
+        "tradeOrderId": "order-2",
+        "settlementChannelId": "channel-fx",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 180,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": [],
+        "taskType": "fundTransfer"
+      }
+    },
+    {
+      "docId": "margin-check",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-002-MC",
+        "tradeOrderId": "order-2",
+        "settlementChannelId": "channel-ops",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 120,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": ["fund-transfer"],
+        "taskType": "marginCheck"
+      }
+    },
+    {
+      "docId": "disbursement",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-002-DB",
+        "tradeOrderId": "order-2",
+        "settlementChannelId": "channel-fx",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 90,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": ["margin-check"],
+        "taskType": "disbursement"
+      }
+    },
+    {
+      "docId": "reconciliation",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-002-RC",
+        "tradeOrderId": "order-2",
+        "settlementChannelId": "channel-ops",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 60,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": ["disbursement"],
+        "taskType": "reconciliation"
+      }
+    }
+  ],
+  "tradeOrders": [
+    {
+      "docId": "order-2",
+      "docType": "tradeOrder",
+      "data": {
+        "tradeOrderNumber": "TRD-002",
+        "instrumentId": "FX-EURUSD",
+        "quantity": 5000,
+        "settlementDate": "2026-09-11T16:00:00Z"
+      }
+    }
+  ]
+}

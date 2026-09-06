@@ -1,0 +1,67 @@
+{
+  "name": "Scenario 3 - Market Hours + Blackout Span",
+  "settlementChannels": [
+    {
+      "docId": "channel-domestic",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Domestic Wire Desk",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 8, "endHour": 12 },
+          { "dayOfWeek": 2, "startHour": 8, "endHour": 12 },
+          { "dayOfWeek": 3, "startHour": 8, "endHour": 12 },
+          { "dayOfWeek": 4, "startHour": 8, "endHour": 12 },
+          { "dayOfWeek": 5, "startHour": 8, "endHour": 12 }
+        ],
+        "blackoutWindows": [
+          { "startDate": "2026-09-08T08:00:00.000Z", "endDate": "2026-09-08T12:00:00.000Z", "reason": "Fed settlement system maintenance" }
+        ],
+        "intervals": []
+      }
+    }
+  ],
+  "settlementTasks": [
+    {
+      "docId": "long-wire",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-003-LW",
+        "tradeOrderId": "order-3",
+        "settlementChannelId": "channel-domestic",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 600,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": [],
+        "taskType": "fundTransfer"
+      }
+    },
+    {
+      "docId": "follow-up",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-003-FU",
+        "tradeOrderId": "order-3",
+        "settlementChannelId": "channel-domestic",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 120,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": ["long-wire"],
+        "taskType": "reconciliation"
+      }
+    }
+  ],
+  "tradeOrders": [
+    {
+      "docId": "order-3",
+      "docType": "tradeOrder",
+      "data": {
+        "tradeOrderNumber": "TRD-003",
+        "instrumentId": "BOND-XYZ",
+        "quantity": 2000,
+        "settlementDate": "2026-09-14T12:00:00Z"
+      }
+    }
+  ]
+}

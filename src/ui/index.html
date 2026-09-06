@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Capital33 · Settlement Reflow</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="dot"></span>
+        <h1>Settlement Reflow</h1>
+      </div>
+      <div class="controls">
+        <select id="scenarioSelect" title="Choose a scenario"></select>
+        <button id="loadBtn" class="primary">Load &amp; Resolve</button>
+        <span id="status" class="status"></span>
+      </div>
+    </header>
+
+    <section class="weekbar">
+      <button id="prevWeek">‹ Prev</button>
+      <span id="weekLabel">No data</span>
+      <button id="nextWeek">Next ›</button>
+      <div class="legend">
+        <span class="chip task">Task</span>
+        <span class="chip blackout">Blackout</span>
+        <span class="chip close">Closed</span>
+        <span class="chip freeSlot">Free</span>
+      </div>
+    </section>
+
+    <main id="gantt" class="gantt"></main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
