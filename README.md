@@ -1,4 +1,12 @@
 # capital33
+
+How to run it:
+1. ``` npm i ```
+2. ```npm run api```
+3. open http://localhost:3000/
+4. Load & Resolve a scenario
+5. Update or create(refresh the web page for create) your own scenario, and load and resolve it again 
+
 Settlement Schedule Reflow - Technical
 
 Terminology:
