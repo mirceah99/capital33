@@ -82,8 +82,8 @@ export function inserInterval(intrevalToInsert: TimeInterval, intervals: TimeInt
             break
         }
     }
-
-    for (let i = startIntervalIndex; i <= stopIntrevalIndex; i++) {
+    const skipFirstIntreval = intervals[startIntervalIndex].endDate === intrevalToInsert.starDate ? 1 : 0
+    for (let i = startIntervalIndex + skipFirstIntreval; i <= stopIntrevalIndex; i++) {
         typeConversionIsAllowed(intervals[i].type, intrevalToInsert.type)
     }
 
@@ -131,11 +131,10 @@ export function inserInterval(intrevalToInsert: TimeInterval, intervals: TimeInt
         intervals.splice(startIntervalIndex + 1, stopIntrevalIndex - startIntervalIndex)
 
     }
-
-
     intervals.splice(startIntervalIndex + 1, 0, intrevalToInsert)
-
-
+    
+    //delete enpty intrevals  intervals[stopIntrevalIndex].starDate = intrevalToInsert.endDate start date can be === end date so is empty intreval
+    clearIntrevals(intervals)
 
 }
 
@@ -162,5 +161,13 @@ export function BlackoutWindowToTimeInterval(blackoutWindow: BlackoutWindow): Ti
         endDate: blackoutWindow.endDate,
         taskId: null,
         type: TimeIntervalType.Blackout
+    }
+}
+
+function clearIntrevals(intervals: TimeIntervals){
+    for(let i = 0; i< intervals.length; i++){
+        if (intervals[i].starDate === intervals[i].endDate){
+            intervals.splice(i, 1)
+        }
     }
 }

@@ -135,6 +135,25 @@ export const settlementTasks: SettlementTask[] = [
 
       taskType: TaskType.Reconciliation
     }
+  },
+  {
+    docId: "task-e",
+    docType: DocType.SettlementTask,
+    data: {
+      taskReference: "STL-001-E",
+      tradeOrderId: "order-2",
+      settlementChannelId: "channel-reconciliation",
+
+      startDate: "2026-09-08T12:00:00Z",
+      endDate: "2026-09-08T13:00:00Z",
+      durationMinutes: 12*60,
+
+      isRegulatoryHold: false,
+
+      dependsOnTaskIds: [],
+
+      taskType: TaskType.Reconciliation
+    }
   }
 ];
 
