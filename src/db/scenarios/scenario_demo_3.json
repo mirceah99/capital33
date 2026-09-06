@@ -1,0 +1,99 @@
+{
+  "name": "Demo 3 - Two tasks (3h on B, 3h on C)",
+  "settlementChannels": [
+    {
+      "docId": "channel-a",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Channel A",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 1, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 2, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 2, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 3, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 3, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 4, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 4, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 5, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 5, "startHour": 14, "endHour": 17 }
+        ],
+        "blackoutWindows": [],
+        "intervals": []
+      }
+    },
+    {
+      "docId": "channel-b",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Channel B",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 10, "endHour": 16 },
+          { "dayOfWeek": 3, "startHour": 10, "endHour": 16 }
+        ],
+        "blackoutWindows": [],
+        "intervals": []
+      }
+    },
+    {
+      "docId": "channel-c",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Channel C",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 2, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 3, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 4, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 5, "startHour": 9, "endHour": 10 }
+        ],
+        "blackoutWindows": [],
+        "intervals": []
+      }
+    }
+  ],
+  "settlementTasks": [
+    {
+      "docId": "task-1",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-DEMO-001",
+        "tradeOrderId": "order-demo",
+        "settlementChannelId": "channel-b",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 180,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": [],
+        "taskType": "fundTransfer"
+      }
+    },
+    {
+      "docId": "task-2",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-DEMO-002",
+        "tradeOrderId": "order-demo",
+        "settlementChannelId": "channel-c",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 180,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": [],
+        "taskType": "complianceScreen"
+      }
+    }
+  ],
+  "tradeOrders": [
+    {
+      "docId": "order-demo",
+      "docType": "tradeOrder",
+      "data": {
+        "tradeOrderNumber": "TRD-DEMO",
+        "instrumentId": "BOND-DEMO",
+        "quantity": 1000,
+        "settlementDate": "2026-09-14T16:00:00.000Z"
+      }
+    }
+  ]
+}

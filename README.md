@@ -55,3 +55,19 @@ All processing within operating hours ✅
 Maintenance/blackout windows respected ✅
 
 Now I stime to add some AI on the codebase, I'll ask the AI to create a intreface, and do some demos, I'll attache the promts in a separate file. I'll add the JD for context here.
+
+
+I'll want to do a visaul demo that will ilustrate how the solution works.
+Oh short a scenario is a full configuration with task channels and orders. But for the tasks start and end date will be null (exception) "isRegulatoryHold": true. Each scenario is loaded and rezolved by reflow service, the solution is after displayed in the ui.
+
+Demo scenarios:
+
+1. Initla scenario: 3 channels A, B and C, A monday to friday 9 - 13 14-17 working hours, b mondat and wednesday 10-16, and C 9-10 mondat-friday. No task for the moment.
+2. Add a task task-1 3 hours on channel B
+3. Add a task task-2 3 hours on channel C
+4. On channel C add blackout for all day tue 8/9
+5. Add task task-3 on channel A 3h
+6. Now do task-3 dependent on task-1 
+7. Now do task-1 dependent on task-2
+8. Add task-4 6h channel A
+9. Add task-5 2h channel A 10-12 7/9 isRegulatoryHold:true

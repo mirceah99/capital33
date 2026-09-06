@@ -1,0 +1,57 @@
+{
+  "name": "Demo 1 - Initial (3 channels, no tasks)",
+  "settlementChannels": [
+    {
+      "docId": "channel-a",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Channel A",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 1, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 2, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 2, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 3, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 3, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 4, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 4, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 5, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 5, "startHour": 14, "endHour": 17 }
+        ],
+        "blackoutWindows": [],
+        "intervals": []
+      }
+    },
+    {
+      "docId": "channel-b",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Channel B",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 10, "endHour": 16 },
+          { "dayOfWeek": 3, "startHour": 10, "endHour": 16 }
+        ],
+        "blackoutWindows": [],
+        "intervals": []
+      }
+    },
+    {
+      "docId": "channel-c",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Channel C",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 2, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 3, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 4, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 5, "startHour": 9, "endHour": 10 }
+        ],
+        "blackoutWindows": [],
+        "intervals": []
+      }
+    }
+  ],
+  "settlementTasks": [],
+  "tradeOrders": []
+}
