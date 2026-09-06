@@ -133,7 +133,7 @@ export function inserInterval(intrevalToInsert: TimeInterval, intervals: TimeInt
 
     //insert intreval spread over 3 ore more intrevals, it means we have to delete middle
     if (stopIntrevalIndex - startIntervalIndex >= 2) {
-        intervals.splice(startIntervalIndex + 1, stopIntrevalIndex - startIntervalIndex)
+        intervals.splice(startIntervalIndex + 1, stopIntrevalIndex - startIntervalIndex - 1)
 
     }
     intervals.splice(startIntervalIndex + 1, 0, intrevalToInsert)
