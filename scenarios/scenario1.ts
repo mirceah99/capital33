@@ -124,8 +124,8 @@ export const settlementTasks: SettlementTask[] = [
       tradeOrderId: "order-1",
       settlementChannelId: "channel-reconciliation",
 
-      startDate: "2026-09-08T12:00:00Z",
-      endDate: "2026-09-08T13:00:00Z",
+      startDate: null,
+      endDate: null,
       durationMinutes: 60,
 
       isRegulatoryHold: false,
@@ -141,11 +141,11 @@ export const settlementTasks: SettlementTask[] = [
     docType: DocType.SettlementTask,
     data: {
       taskReference: "STL-001-E",
-      tradeOrderId: "order-2",
+      tradeOrderId: "order-1",
       settlementChannelId: "channel-reconciliation",
 
-      startDate: "2026-09-08T12:00:00Z",
-      endDate: "2026-09-08T13:00:00Z",
+      startDate: null,
+      endDate: null,
       durationMinutes: 12*60,
 
       isRegulatoryHold: false,
@@ -154,7 +154,65 @@ export const settlementTasks: SettlementTask[] = [
 
       taskType: TaskType.Reconciliation
     }
-  }
+  },
+  {
+    docId: "task-f",
+    docType: DocType.SettlementTask,
+    data: {
+      taskReference: "STL-001-f",
+      tradeOrderId: "order-1",
+      settlementChannelId: "channel-wire",
+
+      startDate: null,
+      endDate: null,
+      durationMinutes: 60,
+
+      isRegulatoryHold: false,
+
+      dependsOnTaskIds: ["task-h"],
+
+      taskType: TaskType.FundTransfer
+    }
+  },
+  {
+    docId: "task-h",
+    docType: DocType.SettlementTask,
+    data: {
+      taskReference: "STL-001-h",
+      tradeOrderId: "order-1",
+      settlementChannelId: "channel-wire",
+
+      startDate: null,
+      endDate: null,
+      durationMinutes: 60,
+
+      isRegulatoryHold: false,
+
+      dependsOnTaskIds: ["task-i"],
+
+      taskType: TaskType.FundTransfer
+    }
+  },
+  {
+    docId: "task-i",
+    docType: DocType.SettlementTask,
+    data: {
+      taskReference: "STL-001-i",
+      tradeOrderId: "order-1",
+      settlementChannelId: "channel-wire",
+
+      startDate: null,
+      endDate: null,
+      durationMinutes: 60,
+
+      isRegulatoryHold: false,
+
+      dependsOnTaskIds: [],
+
+      taskType: TaskType.FundTransfer
+    }
+  },
+
 ];
 
 export const tradeOrders: TradeOrder[] = [

@@ -18,10 +18,30 @@ export class ReflowService {
             }
         }
 
-        for (const task of settlementTasks) {
-            const channel = settlementChannels.find(c => c.docId === task.data.settlementChannelId)
-            if (!channel) throw `Channel ${task.data.settlementChannelId} not found! `
-            this.resolveTaks(task, channel)
+
+        // we need to resolve the task based of dependences
+        let unrezolvedTasks = settlementTasks.length
+        const traskAlreadyRezolved: Record<string, boolean> = {}
+        while (unrezolvedTasks) {
+            let anyTaskRezolvedInThisLoop = false
+            for (const task of settlementTasks) {
+                if (traskAlreadyRezolved[task.docId]) {
+                    continue
+                }
+                const { allDependencesRezolved, rezolveAfterDate } = this.checkTaskDependences(task, settlementTasks)
+                if (!allDependencesRezolved) continue
+
+                const channel = settlementChannels.find(c => c.docId === task.data.settlementChannelId)
+                if (!channel) throw `Channel ${task.data.settlementChannelId} not found! `
+                this.resolveTaks(task, channel, rezolveAfterDate)
+
+                traskAlreadyRezolved[task.docId] = true
+                anyTaskRezolvedInThisLoop = true
+                unrezolvedTasks--;
+                
+
+            }
+            if (!anyTaskRezolvedInThisLoop) throw 'Can not find a solution!'
         }
 
         //logging
@@ -37,7 +57,7 @@ export class ReflowService {
 
     }
 
-    resolveTaks(settlementTask: SettlementTask, settlementChannel: SettlementChannel, afterDate?: string, beforeDate?: string) {
+    resolveTaks(settlementTask: SettlementTask, settlementChannel: SettlementChannel, afterDate?: string | null, beforeDate?: string) {
         if (settlementTask.data.isRegulatoryHold) {
             if (settlementTask.data.startDate === null || settlementTask.data.endDate === null) {
                 throw "For reguraltory hold stard date and end date is mandatory"
@@ -97,13 +117,31 @@ export class ReflowService {
             numberOfMinutesLeft -= numberOfMiuntestToBook
             if (numberOfMinutesLeft === 0) break
         }
-        if (numberOfMinutesLeft !== 0) throw `Task ${settlementTask.docId} can note be resolved!`
-        console.log(`intrevalsBookedByTheTask:`, intrevalsBookedByTheTask)
+        if (numberOfMinutesLeft !== 0) throw `Task ${settlementTask.docId} can note be resolved (numberOfMinutesLeft: ${numberOfMinutesLeft})!`
 
         for (const intreval of intrevalsBookedByTheTask) {
             inserInterval(intreval, settlementChannel.data.intervals)
         }
         settlementTask.data.startDate = intrevalsBookedByTheTask[0].starDate
         settlementTask.data.endDate = intrevalsBookedByTheTask[intrevalsBookedByTheTask.length - 1].endDate
+    }
+
+    checkTaskDependences(task: SettlementTask, allTasks: SettlementTask[]): { allDependencesRezolved: boolean, rezolveAfterDate: string | null } {
+        if (task.data.dependsOnTaskIds.length === 0) return { allDependencesRezolved: true, rezolveAfterDate: null }
+        let lstDependentDate: string | null = null
+        for (const taskId of task.data.dependsOnTaskIds) {
+            const depTask = allTasks.find(t => t.docId === taskId)
+            if (!depTask) throw `Taks dependency ${taskId} not found!`
+            // if end date is not set it means parent task is not resolved
+            if (!depTask.data.endDate) return { allDependencesRezolved: false, rezolveAfterDate: null }
+            if (lstDependentDate === null) { lstDependentDate = depTask.data.endDate }
+            else {
+                lstDependentDate = DateTime.max(
+                    DateTime.fromISO(lstDependentDate),
+                    DateTime.fromISO(depTask.data.endDate)
+                ).toUTC().toISO()
+            }
+        }
+        return { allDependencesRezolved: true, rezolveAfterDate: lstDependentDate }
     }
 }
