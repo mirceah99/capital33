@@ -41,8 +41,12 @@ function mondayUTC(ts) {
   return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - offset);
 }
 
+function hasScenario() {
+  return !!(scenario && Array.isArray(scenario.settlementChannels));
+}
+
 function allIntervals() {
-  if (!scenario) return [];
+  if (!hasScenario()) return [];
   return scenario.settlementChannels.flatMap((c) => c.data.intervals || []);
 }
 
@@ -79,7 +83,7 @@ function fmtDateTime(iso) {
 
 function render() {
   els.gantt.innerHTML = "";
-  if (!scenario || weekStarts.length === 0) {
+  if (!hasScenario() || weekStarts.length === 0) {
     els.gantt.innerHTML = `<div class="empty">No resolved scenario yet. Pick one above and press <b>Load &amp; Resolve</b>.</div>`;
     els.weekLabel.textContent = "No data";
     els.prev.disabled = els.next.disabled = true;
@@ -197,7 +201,7 @@ async function init() {
     .join("");
 
   scenario = await api.resolved();
-  if (scenario) {
+  if (hasScenario()) {
     computeWeeks();
     setStatus("Loaded last resolved scenario", "ok");
   }
