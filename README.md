@@ -71,3 +71,7 @@ Demo scenarios:
 7. Now do task-1 dependent on task-2
 8. Add task-4 6h channel A
 9. Add task-5 2h channel A 10-12 7/9 isRegulatoryHold:true
+10. Add task-6 7h on channle B
+11. Add task-7 1h channel A dependend on both task-4 and task-6
+12. Bronken From 11 add task-8 100h on channel C this should fail 
+13. Broken From 11  add task-8 and task-9 on channel B 1h task-8 dependent on task-9 and task-9 dependent on task-8

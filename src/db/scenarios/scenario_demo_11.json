@@ -1,0 +1,176 @@
+{
+  "name": "Demo 11 - task-7 depends on task-4 AND task-6 (multi upstream)",
+  "settlementChannels": [
+    {
+      "docId": "channel-a",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Channel A",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 1, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 2, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 2, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 3, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 3, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 4, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 4, "startHour": 14, "endHour": 17 },
+          { "dayOfWeek": 5, "startHour": 9, "endHour": 13 },
+          { "dayOfWeek": 5, "startHour": 14, "endHour": 17 }
+        ],
+        "blackoutWindows": [],
+        "intervals": []
+      }
+    },
+    {
+      "docId": "channel-b",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Channel B",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 10, "endHour": 16 },
+          { "dayOfWeek": 3, "startHour": 10, "endHour": 16 }
+        ],
+        "blackoutWindows": [],
+        "intervals": []
+      }
+    },
+    {
+      "docId": "channel-c",
+      "docType": "settlementChannel",
+      "data": {
+        "name": "Channel C",
+        "operatingHours": [
+          { "dayOfWeek": 1, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 2, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 3, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 4, "startHour": 9, "endHour": 10 },
+          { "dayOfWeek": 5, "startHour": 9, "endHour": 10 }
+        ],
+        "blackoutWindows": [
+          { "startDate": "2026-09-08T00:00:00.000Z", "endDate": "2026-09-09T00:00:00.000Z", "reason": "All-day maintenance Tue 8/9" }
+        ],
+        "intervals": []
+      }
+    }
+  ],
+  "settlementTasks": [
+    {
+      "docId": "task-1",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-DEMO-001",
+        "tradeOrderId": "order-demo",
+        "settlementChannelId": "channel-b",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 180,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": ["task-2"],
+        "taskType": "fundTransfer"
+      }
+    },
+    {
+      "docId": "task-2",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-DEMO-002",
+        "tradeOrderId": "order-demo",
+        "settlementChannelId": "channel-c",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 180,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": [],
+        "taskType": "complianceScreen"
+      }
+    },
+    {
+      "docId": "task-3",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-DEMO-003",
+        "tradeOrderId": "order-demo",
+        "settlementChannelId": "channel-a",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 180,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": ["task-1"],
+        "taskType": "marginCheck"
+      }
+    },
+    {
+      "docId": "task-4",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-DEMO-004",
+        "tradeOrderId": "order-demo",
+        "settlementChannelId": "channel-a",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 360,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": [],
+        "taskType": "reconciliation"
+      }
+    },
+    {
+      "docId": "task-5",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-DEMO-005",
+        "tradeOrderId": "order-demo",
+        "settlementChannelId": "channel-a",
+        "startDate": "2026-09-07T10:00:00.000Z",
+        "endDate": "2026-09-07T12:00:00.000Z",
+        "durationMinutes": 120,
+        "isRegulatoryHold": true,
+        "dependsOnTaskIds": [],
+        "taskType": "regulatoryHold"
+      }
+    },
+    {
+      "docId": "task-6",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-DEMO-006",
+        "tradeOrderId": "order-demo",
+        "settlementChannelId": "channel-b",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 420,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": [],
+        "taskType": "fundTransfer"
+      }
+    },
+    {
+      "docId": "task-7",
+      "docType": "settlementTask",
+      "data": {
+        "taskReference": "STL-DEMO-007",
+        "tradeOrderId": "order-demo",
+        "settlementChannelId": "channel-a",
+        "startDate": null,
+        "endDate": null,
+        "durationMinutes": 60,
+        "isRegulatoryHold": false,
+        "dependsOnTaskIds": ["task-4", "task-6"],
+        "taskType": "disbursement"
+      }
+    }
+  ],
+  "tradeOrders": [
+    {
+      "docId": "order-demo",
+      "docType": "tradeOrder",
+      "data": {
+        "tradeOrderNumber": "TRD-DEMO",
+        "instrumentId": "BOND-DEMO",
+        "quantity": 1000,
+        "settlementDate": "2026-09-14T16:00:00.000Z"
+      }
+    }
+  ]
+}
