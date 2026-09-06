@@ -18,6 +18,11 @@ export class ReflowService {
             }
         }
 
+        //first resolve regualtoryhold to avoid the cases when a normal task takes a regulatory hold slot 
+        settlementTasks.sort(
+            (a, b) => Number(b.data.isRegulatoryHold) - Number(a.data.isRegulatoryHold)
+        );
+
 
         // we need to resolve the task based of dependences
         let unrezolvedTasks = settlementTasks.length
@@ -38,7 +43,7 @@ export class ReflowService {
                 traskAlreadyRezolved[task.docId] = true
                 anyTaskRezolvedInThisLoop = true
                 unrezolvedTasks--;
-                
+
 
             }
             if (!anyTaskRezolvedInThisLoop) throw 'Can not find a solution!'
