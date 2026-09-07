@@ -1,18 +1,18 @@
 import { DateTime } from 'luxon';
 import { BlackoutWindow, OperatingHours, SettlementChannel, TimeInterval, TimeIntervals, TimeIntervalType } from '../reflow/types';
-// this function will create a full countinous interval( no gaps)
-export function initiateOperetingHourInIntervals(channel: SettlementChannel) {
+// this function will create a full continuous interval( no gaps)
+export function initiateOperatingHourInIntervals(channel: SettlementChannel) {
 
-    let operatingHours: OperatingHours = JSON.parse(JSON.stringify(channel.data.operatingHours)) // deep copy becaus I'll update it
+    let operatingHours: OperatingHours = JSON.parse(JSON.stringify(channel.data.operatingHours)) // deep copy because I'll update it
     const intervals: TimeIntervals = channel.data.intervals
     if (intervals.length > 0) return // intervals alread initiates
     const nrOfWeeks = 4; // 4 weeks timeline can be updated
     const startDate = DateTime.utc().startOf('week'); // moday of this week
 
     // the week starts on Monday, no // 0–6, Sunday = 0 BS!
-    operatingHours.forEach(operationgHour => {
-        operationgHour.dayOfWeek -= 1
-        if (operationgHour.dayOfWeek === -1) operationgHour.dayOfWeek = 6
+    operatingHours.forEach(operatingHour => {
+        operatingHour.dayOfWeek -= 1
+        if (operatingHour.dayOfWeek === -1) operatingHour.dayOfWeek = 6
     })
     for (const operatingHour of operatingHours) {
         let siftingDate = startDate; // immutable object
@@ -48,13 +48,13 @@ export function initiateOperetingHourInIntervals(channel: SettlementChannel) {
         if (intervals[i].endDate === intervals[i + 1].starDate) {
             continue;
         }
-        const fillGapIntereval: TimeInterval = {
+        const fillGapInterval: TimeInterval = {
             starDate: intervals[i].endDate,
             endDate: intervals[i + 1].starDate,
             taskId: null,
             type: TimeIntervalType.Close
         }
-        intervals.splice(i + 1, 0, fillGapIntereval) // this can be time consuming
+        intervals.splice(i + 1, 0, fillGapInterval) // this can be time consuming
         i++
     }
 
@@ -71,75 +71,75 @@ export function initiateOperetingHourInIntervals(channel: SettlementChannel) {
 }
 
 // insert interval function will be used on intervals with no gaps 
-export function inserInterval(intrevalToInsert: TimeInterval, intervals: TimeIntervals) {
-    if (intrevalToInsert.starDate < intervals[0].starDate || intrevalToInsert.endDate > intervals[intervals.length - 1].endDate) {
-        throw 'Insert intreval failed, out of range!!'
+export function insertInterval(intervalToInsert: TimeInterval, intervals: TimeIntervals) {
+    if (intervalToInsert.starDate < intervals[0].starDate || intervalToInsert.endDate > intervals[intervals.length - 1].endDate) {
+        throw 'Insert interval failed, out of range!!'
     }
     let startIntervalIndex: number = -1;
-    let stopIntrevalIndex: number = -1;
+    let stopIntervalIndex: number = -1;
     for (let i = 0; i < intervals.length; i++) {
-        const intreval = intervals[i];
-        if (DateTime.fromISO(intrevalToInsert.starDate).toMillis() <= DateTime.fromISO(intreval.endDate).toMillis() && startIntervalIndex === -1) {
+        const interval = intervals[i];
+        if (DateTime.fromISO(intervalToInsert.starDate).toMillis() <= DateTime.fromISO(interval.endDate).toMillis() && startIntervalIndex === -1) {
             startIntervalIndex = i;
         }
-        if (DateTime.fromISO(intrevalToInsert.endDate).toMillis() <= DateTime.fromISO(intreval.endDate).toMillis()) {
-            stopIntrevalIndex = i;
+        if (DateTime.fromISO(intervalToInsert.endDate).toMillis() <= DateTime.fromISO(interval.endDate).toMillis()) {
+            stopIntervalIndex = i;
             break
         }
     }
-    const skipFirstIntreval = intervals[startIntervalIndex].endDate === intrevalToInsert.starDate ? 1 : 0
-    for (let i = startIntervalIndex + skipFirstIntreval; i <= stopIntrevalIndex; i++) {
-        typeConversionIsAllowed(intervals[i].type, intrevalToInsert.type)
+    const skipFirstInterval = intervals[startIntervalIndex].endDate === intervalToInsert.starDate ? 1 : 0
+    for (let i = startIntervalIndex + skipFirstInterval; i <= stopIntervalIndex; i++) {
+        typeConversionIsAllowed(intervals[i].type, intervalToInsert.type)
     }
 
-    //insert intreval contained by bigger interval
-    if (startIntervalIndex === stopIntrevalIndex) {
-        const intreval = intervals[startIntervalIndex];
+    //insert interval contained by bigger interval
+    if (startIntervalIndex === stopIntervalIndex) {
+        const interval = intervals[startIntervalIndex];
         // same start end date
-        if (DateTime.fromISO(intrevalToInsert.starDate).toMillis() === DateTime.fromISO(intreval.starDate).toMillis() &&
-            DateTime.fromISO(intrevalToInsert.endDate).toMillis() === DateTime.fromISO(intreval.endDate).toMillis()) {
-            intreval.type = intrevalToInsert.type
-            intreval.taskId = intrevalToInsert.taskId;
+        if (DateTime.fromISO(intervalToInsert.starDate).toMillis() === DateTime.fromISO(interval.starDate).toMillis() &&
+            DateTime.fromISO(intervalToInsert.endDate).toMillis() === DateTime.fromISO(interval.endDate).toMillis()) {
+            interval.type = intervalToInsert.type
+            interval.taskId = intervalToInsert.taskId;
             return
         }
 
         // same end date
-        if (DateTime.fromISO(intrevalToInsert.endDate).toMillis() === DateTime.fromISO(intreval.endDate).toMillis()) {
-            intreval.endDate = intrevalToInsert.starDate
-            intervals.splice(startIntervalIndex + 1, 0, intrevalToInsert)
+        if (DateTime.fromISO(intervalToInsert.endDate).toMillis() === DateTime.fromISO(interval.endDate).toMillis()) {
+            interval.endDate = intervalToInsert.starDate
+            intervals.splice(startIntervalIndex + 1, 0, intervalToInsert)
             return
         }
 
         // same start date
-        if (DateTime.fromISO(intrevalToInsert.starDate).toMillis() === DateTime.fromISO(intreval.starDate).toMillis()) {
-            intreval.starDate = intrevalToInsert.endDate
-            intervals.splice(startIntervalIndex, 0, intrevalToInsert)
+        if (DateTime.fromISO(intervalToInsert.starDate).toMillis() === DateTime.fromISO(interval.starDate).toMillis()) {
+            interval.starDate = intervalToInsert.endDate
+            intervals.splice(startIntervalIndex, 0, intervalToInsert)
             return
         }
 
         // different end date and start date 
-        const oldEndDate = intreval.endDate
-        intreval.endDate = intrevalToInsert.starDate
-        intervals.splice(startIntervalIndex + 1, 0, intrevalToInsert)
-        intervals.splice(startIntervalIndex + 2, 0, { starDate: intrevalToInsert.endDate, endDate: oldEndDate, type: intreval.type, taskId: intreval.taskId })
+        const oldEndDate = interval.endDate
+        interval.endDate = intervalToInsert.starDate
+        intervals.splice(startIntervalIndex + 1, 0, intervalToInsert)
+        intervals.splice(startIntervalIndex + 2, 0, { starDate: intervalToInsert.endDate, endDate: oldEndDate, type: interval.type, taskId: interval.taskId })
         return
 
 
     }
 
 
-    intervals[startIntervalIndex].endDate = intrevalToInsert.starDate
-    intervals[stopIntrevalIndex].starDate = intrevalToInsert.endDate
+    intervals[startIntervalIndex].endDate = intervalToInsert.starDate
+    intervals[stopIntervalIndex].starDate = intervalToInsert.endDate
 
-    //insert intreval spread over 3 ore more intrevals, it means we have to delete middle
-    if (stopIntrevalIndex - startIntervalIndex >= 2) {
-        intervals.splice(startIntervalIndex + 1, stopIntrevalIndex - startIntervalIndex - 1)
+    //insert interval spread over 3 ore more intervals, it means we have to delete middle
+    if (stopIntervalIndex - startIntervalIndex >= 2) {
+        intervals.splice(startIntervalIndex + 1, stopIntervalIndex - startIntervalIndex - 1)
 
     }
-    intervals.splice(startIntervalIndex + 1, 0, intrevalToInsert)
+    intervals.splice(startIntervalIndex + 1, 0, intervalToInsert)
 
-    //delete enpty intrevals  intervals[stopIntrevalIndex].starDate = intrevalToInsert.endDate start date can be === end date so is empty intreval
-    clearIntrevals(intervals)
+    //delete empty intervals  intervals[stopIntervalIndex].starDate = intervalToInsert.endDate start date can be === end date so is empty intreval
+    clearIntervals(intervals)
 
 }
 
@@ -147,16 +147,16 @@ export function inserInterval(intrevalToInsert: TimeInterval, intervals: TimeInt
 // but from   TimeIntervalType.Blackout or TimeIntervalType.Close is not okay to go to TimeIntervalType.Task
 function typeConversionIsAllowed(initialType: TimeIntervalType, targetType: TimeIntervalType) {
     if (targetType === TimeIntervalType.Task && initialType !== TimeIntervalType.FreeSlot) {
-        throw 'Task intreval can be sloted only in free slots!'
+        throw 'Task interval can be stored only in free slots!'
     }
     if (targetType === TimeIntervalType.Blackout && initialType === TimeIntervalType.Task) {
-        throw 'Blackout can not be sloted over task, please move the task first!'
+        throw 'Blackout can not be stored over task, please move the task first!'
     }
     if (targetType === TimeIntervalType.Close && initialType === TimeIntervalType.Task) {
-        throw 'Blackout can not be sloted over task, please move the task first!'
+        throw 'Blackout can not be stored over task, please move the task first!'
     }
     if (targetType === TimeIntervalType.FreeSlot && initialType === TimeIntervalType.Task) {
-        throw 'FreeSlot can not be sloted over task, please move the task first!'
+        throw 'FreeSlot can not be stored over task, please move the task first!'
     }
 }
 
@@ -169,7 +169,7 @@ export function BlackoutWindowToTimeInterval(blackoutWindow: BlackoutWindow): Ti
     }
 }
 
-function clearIntrevals(intervals: TimeIntervals) {
+function clearIntervals(intervals: TimeIntervals) {
     for (let i = 0; i < intervals.length; i++) {
         if (intervals[i].starDate === intervals[i].endDate) {
             intervals.splice(i, 1)

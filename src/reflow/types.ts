@@ -11,8 +11,8 @@ export enum TaskType {
   Reconciliation = 'reconciliation',
   RegulatoryHold = 'regulatoryHold',
 }
-export type OperatingHours = OperetingHour[]
-export type OperetingHour = {
+export type OperatingHours = OperatingHour[]
+export type OperatingHour = {
     dayOfWeek: number; // 0–6, Sunday = 0
     startHour: number; // 0–23
     endHour: number; // 0–23
@@ -24,7 +24,7 @@ export type BlackoutWindow = {
     reason?: string
 }
 export enum TimeIntervalType {
-  Task = 'task', // task in progres
+  Task = 'task', // task in progress
   Blackout = 'blackout', // maintenance 
   FreeSlot = 'freeSlot', // free to be booked by task
   Close = 'close', // closed
@@ -57,7 +57,7 @@ export type SettlementChannel = BaseDocument &
         name: string;
         operatingHours: OperatingHours,
         blackoutWindows: BlackoutWindows,
-        intervals: TimeIntervals // IMHO improvement from the orignal data type, end date shoud be <= start deate to the next element
+        intervals: TimeIntervals // IMHO improvement from the original data type, end date should be <= start date to the next element
     }
 }
 
